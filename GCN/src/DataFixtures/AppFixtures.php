@@ -15,7 +15,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
             $product = new Product();
             $product->setName("nom du produit n'$i")
-                ->setPicture("http://placehold.it/350x150")
+                ->setPicture("https://source.unsplash.com/random/350x150")
                 ->setDescription("Description du produit n'$i")
                 ->setCreated(new \DateTime());
             if ($i < 5) {
@@ -26,13 +26,7 @@ class AppFixtures extends Fixture
             $manager->persist($product);
         }
 
-        $contact = new Contact();
-        $contact->setEmail("email.factice@gmail.com")
-            ->setSubject("mon sujet de contact")
-            ->setMessage("le message du contact")
-            ->setContactDate(new \DateTime())
-            ->setCreated(new \DateTime());
-        $manager->persist($contact);
+
 
         $manager->flush();
     }
