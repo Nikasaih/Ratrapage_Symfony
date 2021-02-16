@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>liste des produits</h1>
+
+	{% for product in products %}
+
+		<h2>{{product.name}}</h2>
+		<img src="{{product.picture}}" alt="">
+		<p>{{product.created | date('d/m/Y')}}</p>
+		<a href="{{path('product_fiche', {'id' :product.id})}}">
+			<button>
+				voir le produits
+			</button>
+		</a>
+
+	{% endfor %}
+{% endblock %}

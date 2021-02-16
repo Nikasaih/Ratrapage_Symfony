@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PublicController!
+{% endblock %}
+
+{% block body %}
+	{% for product in products %}
+		{% if product.promo %}
+			<h2>{{product.name}}</h2>
+			<img src="{{product.picture}}" alt="">
+			<p>{{product.created | date('d/m/Y')}}</p>
+			<button class="btn btn-danger">promotion</button>
+			<a href="{{path('product_fiche', {'id' :product.id})}}">
+				<button>
+					voir le produits
+				</button>
+			</a>
+
+			<a href="#">
+				<button>
+					ajouter ce produit au panier
+				</button>
+			</a>
+		{% endif %}
+	{% endfor %}
+{% endblock %}
