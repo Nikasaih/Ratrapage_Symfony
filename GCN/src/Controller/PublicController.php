@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PublicController extends AbstractController
@@ -72,11 +73,62 @@ class PublicController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/Panier/add/{id}", name="cart_add")
+     */
+    public function add($id, SessionInterface $session)
+    {
+        $panier = $session->get('panier', []);
+
+
+        if (!empty($panier[$id])) {
+            $panier[$id]++;
+        } else {
+            $panier[$id] = 1;
+        }
+
+
+        $session->set('panier', $panier);
+
+        dd($session->get('panier'));
+    }
+
+
     /**
      * @Route("/Panier", name="panier")
      */
-    public function panier()
+    public function panier(SessionInterface $session, ProductRepository $repo)
     {
-        return $this->render('public/panier.html.twig');
+        $panier = $session->get('panier', []);
+
+        $panierWithData = [];
+
+        foreach ($panier as $id => $quantity) {
+            $panierWithData[] = [
+                'product' => $repo->find($id),
+                'quantity' => $quantity
+            ];
+        }
+
+        return $this->render('public/panier.html.twig', [
+            'items' => $panierWithData
+        ]);
+    }
+
+    /**
+     * @Route("/Panier/remove/{id}", name="card_remove")
+     */
+    public function remove($id, SessionInterface $session)
+    {
+        $panier = $session->get('panier', []);
+
+        if (!empty($panier[$id])) {
+            unset($panier[$id]);
+        }
+
+        $session->set('panier', $panier);
+
+        return $this->redirectToRoute("panier");
     }
 }
